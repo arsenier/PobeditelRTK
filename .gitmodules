@@ -1,0 +1,3 @@
+[submodule "lib/ALFA4C"]
+	path = lib/ALFA4C
+	url = git@github.com:arsenier/ALFA4C.git

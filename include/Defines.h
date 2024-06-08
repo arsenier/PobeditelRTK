@@ -61,3 +61,5 @@
 #define MOTORS_ABS_OPTIMUM_SETTING              2.0
 #define MOTORS_PI_KI                            (MOTORS_KE/(MOTORS_ABS_OPTIMUM_SETTING*MOTORS_Tu))
 #define MOTORS_PI_GAIN                          (MOTORS_PI_KI*MOTORS_TIME_CONSTANT)
+
+///////////////////////////////////////////////
