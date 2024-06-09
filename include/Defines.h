@@ -1,8 +1,8 @@
 #pragma once
 #include"Arduino.h"
 //motor0
-#define M0_INA 33
-#define M0_INB 35
+#define M0_INA 35
+#define M0_INB 33
 #define M0_PWM 5
 #define M0_CS A2
 #define M0_INTERRUPT_PIN 20 // PD1
@@ -46,19 +46,20 @@
 
 //////////////////////////////////////////////
 
-#define Ts_us                                   6000 /*!< sample time [microseconds]*/
+#define Ts_us                                   4000 /*!< sample time [microseconds]*/
 #define Ts_s                                    ((float)Ts_us * 0.000001)
 
-#define MOTORS_MAX_U                            12.0 /*!< [V] */
-#define MOTORS_MOVE_U                           2  /*!< [V] */
-#define MOTORS_MAX_SPEED                        30.0     //rad/second
-#define MOTORS_KE                               0.185   /*!< [V/rad/s] */
+#define MOTORS_MAX_U                            25 /*!< [V] */
+#define MOTORS_MAX_U_USAGE                      10 /*!< [V] */
+#define MOTORS_MOVE_U                           1  /*!< [V] */
+#define MOTORS_MAX_SPEED                        8.0     //rad/second
+#define MOTORS_KE                               0.8   /*!< [V/rad/s] */
 
-#define MOTORS_PPR                              450     //Encoder pulses per rotation
+#define MOTORS_PPR                              900     //Encoder pulses per rotation
 #define MOTORS_GEAR_RATIO                       1
 #define MOTORS_TIME_CONSTANT                    0.030
-#define MOTORS_Tu                               Ts_s
-#define MOTORS_ABS_OPTIMUM_SETTING              2.0
+#define MOTORS_Tu                               Ts_s*4
+#define MOTORS_ABS_OPTIMUM_SETTING              4.0
 #define MOTORS_PI_KI                            (MOTORS_KE/(MOTORS_ABS_OPTIMUM_SETTING*MOTORS_Tu))
 #define MOTORS_PI_GAIN                          (MOTORS_PI_KI*MOTORS_TIME_CONSTANT)
 

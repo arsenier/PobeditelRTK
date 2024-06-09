@@ -9,6 +9,7 @@ struct MotorConnectionParams
 {
     int IN1;
     int IN2;
+    int PWM;
     int ENCA_PIN;
     int ENCA_CH;
     //
@@ -29,6 +30,7 @@ struct MotorConnectionParams
 struct MotorControllerParams
 {
     float maxU;
+    float maxUuse;
     float moveU;
     float maxSpeed;
     float maxAccel;
@@ -147,6 +149,8 @@ void Motor::applyU(float u)
         u = 0;
     }
 
+    u = constrain(u, -maxUuse, maxUuse);
+
     float slowed_u = UchangeLimiter.tick(u);
     // float slowed_u = u;
     int pwm = slowed_u / maxU * 255;
@@ -158,13 +162,15 @@ void Motor::applyU(float u)
 
     if (pwm >= 0)
     {
-        analogWrite(IN2, 255);
-        analogWrite(IN1, 255 - pwm);
+        digitalWrite(IN2, HIGH);
+        digitalWrite(IN1, LOW);
+        analogWrite(PWM, pwm);
     }
     else
     {
-        analogWrite(IN2, 255 + pwm);
-        analogWrite(IN1, 255);
+        digitalWrite(IN2, LOW);
+        digitalWrite(IN1, HIGH);
+        analogWrite(PWM, -pwm);
     }
 }
 
@@ -173,9 +179,23 @@ void Motor::zeroAngle()
     angle = 0.0;
 }
 
+
+double anti_windup(double in, double modder)
+{
+    while(in > modder*0.5)
+    {
+        in = in - modder;
+    }
+    while(in < -modder*0.5)
+    {
+        in = in + modder;
+    }
+    return in;
+}
+
 double Motor::getAngle()
 {
-    return angle;
+    return anti_windup(angle, 2*M_PI);
 }
 
 int Motor::getTicks()

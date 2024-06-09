@@ -4,12 +4,23 @@
 
 #define LOG(x) String(x) + " " + 
 
-typedef SFix<12,12> sfix;
+typedef float sfix;
 
 const auto tc = (sfix(2*M_PI));
-const auto ts (sfix(1*M_PI));
-const auto phis (sfix(1));
-const auto phi0 (sfix(1));
+const auto ts (sfix(2*2/3.6*M_PI));
+const auto phis (sfix(1.5));
+const auto phi0 (sfix(-2));
+
+sfix modc(sfix in, sfix modder)
+{
+    in = in + modder;
+    while(in > modder*sfix(0.5))
+    {
+        in = in - modder;
+    }
+    return in;
+}
+
 
 inline sfix Fc(sfix t, sfix phists)
 {
@@ -42,11 +53,12 @@ inline sfix Ffull(sfix t, sfix tc, sfix ts, sfix phis, sfix phi0)
     // Serial.println(LOG(t.asFloat()) LOG(tc.asFloat()) LOG(ts.asFloat()) LOG(phis.asFloat()) LOG(phi0.asFloat()) "");
     // Serial.println(LOG(t < -ts*sfix(0.5)) LOG(t < ts*sfix(0.5)) "");
     // Serial.println(LOG(t.asFloat()) LOG((ts*sfix(0.5)).asFloat()) "");
+    t = modc(t, tc);
     sfix out;
-    auto phists = phis*ts.invFast();
+    auto phists = phis/ts;
     if(t < -ts*sfix(0.5))
     {
-        auto dydx = (sfix(2*M_PI) - phis) * (tc - ts).invFast();
+        auto dydx = (sfix(2*M_PI) - phis) / (tc - ts);
         out = Fl(t, ts, phists, dydx);
     }
     else if(t < ts*sfix(0.5))
@@ -55,18 +67,8 @@ inline sfix Ffull(sfix t, sfix tc, sfix ts, sfix phis, sfix phi0)
     }
     else
     {
-        auto dydx = (sfix(2*M_PI) - phis) * (tc - ts).invFast();
+        auto dydx = (sfix(2*M_PI) - phis) / (tc - ts);
         out = Fr(t, ts, phists, dydx);
     }
     return out + phi0;
-}
-
-sfix modc(sfix in, sfix modder)
-{
-    in = in + modder;
-    while(in > modder*sfix(0.5))
-    {
-        in = in - modder;
-    }
-    return in;
 }
