@@ -24,7 +24,6 @@ sfix modc(sfix in, sfix modder)
 
 inline sfix Fc(sfix t, sfix phists)
 {
-    // Serial.println("\n" + String(t.asFloat()) + " " + String(phists.asFloat()));
     return t*phists;
 }
 
@@ -50,9 +49,6 @@ inline sfix Fl(sfix t, sfix ts, sfix phists, sfix dydx)
 
 inline sfix Ffull(sfix t, sfix tc, sfix ts, sfix phis, sfix phi0)
 {
-    // Serial.println(LOG(t.asFloat()) LOG(tc.asFloat()) LOG(ts.asFloat()) LOG(phis.asFloat()) LOG(phi0.asFloat()) "");
-    // Serial.println(LOG(t < -ts*sfix(0.5)) LOG(t < ts*sfix(0.5)) "");
-    // Serial.println(LOG(t.asFloat()) LOG((ts*sfix(0.5)).asFloat()) "");
     t = modc(t, tc);
     sfix out;
     auto phists = phis/ts;
